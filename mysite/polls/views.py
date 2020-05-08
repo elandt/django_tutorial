@@ -2,31 +2,36 @@
 # and template loader
 from django.shortcuts import get_object_or_404, render
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views import generic
 
 from .models import Choice, Question
 
 
 # Create your views here.
-def index(request):
-    # Grab the 5 most recent questions, ordered by with
-    # the most reecnt first
-    latest_question_list = Question.objects.order_by("-pub_date")[:5]
-    context = {
-        "latest_question_list": latest_question_list
-    }
-    return render(request, "polls/index.html", context)
+class IndexView(generic.ListView):
+    # Overriding the the ListView generic view default
+    # template called <app name>/<model name>_list.html
+    template_name = "polls/index.html"
+    # Override the automatically generated context variable is question_list
+    context_object_name = "latest_question_list"
+
+    def get_queryset(self):
+        """Return the last five pulished questions."""
+        return Question.objects.order_by("-pub_date")[:5]
 
 
-def detail(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, "polls/detail.html", {"question": question})
+class DetailView(generic.DetailView):
+    model = Question
+    # Overrides the default template name of DetailView
+    # generic, default is <app name>/<model name>_detail.html
+    template_name = "polls/detail.html"
 
 
-def results(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, "polls/results.html", {"question": question})
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = "polls/results.html"
 
 
 def vote(request, question_id):
@@ -48,5 +53,5 @@ def vote(request, question_id):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        url_redirect = "poll:results"
+        url_redirect = "polls:results"
         return HttpResponseRedirect(reverse(url_redirect, args=(question_id,)))
