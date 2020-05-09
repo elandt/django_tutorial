@@ -5,9 +5,9 @@ from .models import Choice, Question
 # Register your models here.
 
 
-class ChoiceInLine(admin.StackedInline):
+class ChoiceInLine(admin.TabularInline):
     model = Choice
-    # Provide enough fields for 3
+    # By default, provide enough fields for 3
     # choices when editing choices on
     # the Question admin page in addition to
     # the fields for choices that exist
