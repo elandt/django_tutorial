@@ -20,6 +20,13 @@ class QuestionAdmin(admin.ModelAdmin):
     # This can be overridden by telling Django what
     # what to display for an object using list_display
     list_display = ("question_text", "pub_date", "was_published_recently")
+    # Adds a filter on the pub_date to the Question selection admin page
+    # The type of filter displayed depends on the type of field being filtered
+    list_filter = ["pub_date"]
+    # Adds the ability to search the Question selection
+    # admin page by question_text
+    # Searching uses a LIKE in the query behind the scenes
+    search_fields = ["question_text"]
     fieldsets = [
         (None, {"fields": ["question_text"]}),
         # The first value is the name of the set
