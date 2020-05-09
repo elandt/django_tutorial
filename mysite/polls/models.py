@@ -23,6 +23,12 @@ class Question(models.Model):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
+    # These attributes need to come after the method definition
+    # They provide Django with info about how
+    # to display the result of the method on the admin page
+    was_published_recently.admin_order_field = "pub_date"
+    was_published_recently.boolean = True
+    was_published_recently.short_description = "Published recently?"
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
