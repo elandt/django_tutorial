@@ -8,6 +8,9 @@ from .models import Question
 class QuestionAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {"fields": ["question_text"]}),
+        # The first value is the name of the set
+        # it will display on the admin page
+        # as a section header
         ("Date Information", {"fields": ["pub_date"]}),
     ]
 
