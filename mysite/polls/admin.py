@@ -16,6 +16,10 @@ class ChoiceInLine(admin.TabularInline):
 
 
 class QuestionAdmin(admin.ModelAdmin):
+    # By default, Django displays the str() of each object
+    # This can be overridden by telling Django what
+    # what to display for an object using list_display
+    list_display = ("question_text", "pub_date", "was_published_recently")
     fieldsets = [
         (None, {"fields": ["question_text"]}),
         # The first value is the name of the set
